@@ -1,1 +1,1 @@
-# basic-wp-timber-theme
+# Basic WP Timber Theme

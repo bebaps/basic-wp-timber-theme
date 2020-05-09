@@ -1,0 +1,28 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <article class="post-type-{{ post.post_type }} {{ sidebar_class }}">
+        <figure>
+            <img src="{{ post.thumbnail.src|resize(1200, 300) }}">
+        </figure>
+        <section>
+            <h1>{{ post.title }}</h1>
+            <p>
+                <span>Posted by</span><a href="{{ post.author.path }}"> {{ post.author.name }} </a> on
+                <time datetime="{{ post.date|date('Y-m-d H:i:s') }}">{{ post.date }}</time>
+            </p>
+            <div>
+                {{ post.content }}
+            </div>
+        </section>
+
+        {# Comments #}
+        {# For a completely custom method, see https://timber.github.io/docs/guides/comments #}
+        {{ function('comments_template') }}
+    </article>
+
+    {% if sidebar %}
+        {# See https://timber.github.io/docs/guides/sidebars/ for options #}
+        {{ sidebar }}
+    {% endif %}
+{% endblock %}

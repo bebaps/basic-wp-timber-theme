@@ -1,0 +1,45 @@
+<!doctype html>
+<html {{ site.language_attributes }}>
+<head>
+    <meta charset="{{ site.charset }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#000">
+
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    {% if function('is_singular') and function('pings_open') %}
+        <link rel="pingback" href="{{ site.pingback_url }}">
+    {% endif %}
+
+    {% block head %}
+        {# Can add custom CSS/JS per page #}
+    {% endblock %}
+
+    {{ function('wp_head') }}
+</head>
+
+<body class="{{ body_class }}">
+{{ function('wp_body_open') }}
+
+{# Screen reader text #}
+<a href="#mainContent">{{ _e( 'Skip to content') }}</a>
+
+<div id="webPage">
+    {% include 'partials/header.twig' %}
+
+    <main id="mainContent">
+        {% if title %}
+            <h1>{{ title }}</h1>
+        {% endif %}
+
+        {% block content %}
+            Sorry, no content
+        {% endblock %}
+    </main>
+
+    {% include 'partials/footer.twig' %}
+</div>
+
+{{ function('wp_footer') }}
+</body>
+</html>

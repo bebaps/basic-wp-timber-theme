@@ -1,0 +1,14 @@
+<header>
+    {% block header %}
+        <div>
+            <h1 role="banner">
+                <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
+            </h1>
+
+            {% if menu %}
+                {# If you want to just use the default WordPress markup, use wp_nav_menu instead and delete partials/menu.twig #}
+                {% include "partials/menu.twig" with {'items': menu.get_items} %}
+            {% endif %}
+        </div>
+    {% endblock %}
+</header>

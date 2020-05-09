@@ -1,0 +1,10 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <article class="post-type-{{ post.post_type }}">
+        <h1>{{ post.title }}</h1>
+        <section>
+            {{ post.content }}
+        </section>
+    </article>
+{% endblock %}
