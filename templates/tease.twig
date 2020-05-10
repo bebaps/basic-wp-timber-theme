@@ -4,7 +4,7 @@
         <p>{{ post.preview.length(25) }}</p>
         {% if post.get_thumbnail %}
             <figure>
-                <img src="{{ post.thumbnail.src }}"/>
+                <img src="{{ post.thumbnail.src }}" alt="">
             </figure>
         {% endif %}
     {% endblock %}
