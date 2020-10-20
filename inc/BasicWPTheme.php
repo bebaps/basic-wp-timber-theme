@@ -1,8 +1,4 @@
 <?php
-/**
- * We're going to configure our theme inside of a subclass of Timber\Site
- * You can move this to its own file and include here via php's include("MySite.php")
- */
 
 use Timber\Site;
 use Timber\Menu;
@@ -10,37 +6,14 @@ use Twig\Extension\StringLoaderExtension;
 
 class BasicWPTheme extends Site
 {
-    /**
-     * Add timber support.
-     */
     public function __construct()
     {
-        add_action('after_setup_theme', [$this, 'theme_supports']);
-        add_filter('timber/context', [$this, 'add_to_context']);
-        add_filter('timber/twig', [$this, 'add_to_twig']);
-        add_action('wp_enqueue_scripts', [$this, 'theme_assets']);
-        add_action('init', [$this, 'register_post_types']);
-        add_action('init', [$this, 'register_taxonomies']);
+        add_action('after_setup_theme', [$this, 'addThemeSupport']);
+        add_filter('timber/context', [$this, 'addToContext']);
+        add_filter('timber/twig', [$this, 'addToTwig']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueues']);
 
         parent::__construct();
-    }
-
-    /**
-     * This is where you can register custom post types.
-     *
-     * @return void
-     */
-    public function register_post_types()
-    {
-
-    }
-
-    /**
-     * This is where you can register custom taxonomies.
-     */
-    public function register_taxonomies()
-    {
-
     }
 
     /**
@@ -50,10 +23,10 @@ class BasicWPTheme extends Site
      *
      * @return mixed
      */
-    public function add_to_context($context)
+    public function addToContext($context)
     {
-        $context['menu'] = new Menu();
         $context['site'] = $this;
+        $context['menu'] = new Menu();
 
         return $context;
     }
@@ -63,7 +36,7 @@ class BasicWPTheme extends Site
      *
      * @return void
      */
-    public function theme_supports()
+    public function addThemeSupport()
     {
         // Add default posts and comments RSS feed links to head.
         add_theme_support('automatic-feed-links');
@@ -83,6 +56,8 @@ class BasicWPTheme extends Site
          */
         add_theme_support('post-thumbnails');
 
+        add_theme_support('menus');
+
         /**
          * Switch default core markup for search form, comment form, and comments
          * to output valid HTML5.
@@ -96,8 +71,6 @@ class BasicWPTheme extends Site
                 'caption',
             ]
         );
-
-        add_theme_support('menus');
     }
 
     /**
@@ -107,7 +80,7 @@ class BasicWPTheme extends Site
      *
      * @return mixed
      */
-    public function add_to_twig($twig)
+    public function addToTwig($twig)
     {
         $twig->addExtension(new StringLoaderExtension());
 
@@ -119,7 +92,7 @@ class BasicWPTheme extends Site
      *
      * @return void
      */
-    public function theme_assets()
+    public function enqueues()
     {
         // Make use of the default WordPress comment script.
         if ((!is_admin()) && is_singular() && comments_open() && get_option('thread_comments')) {
