@@ -17,29 +17,28 @@
 
     {{ function('wp_head') }}
 </head>
-
 <body class="{{ body_class }}">
-{{ function('wp_body_open') }}
+    {{ function('wp_body_open') }}
 
-{# Screen reader text #}
-<a href="#mainContent">{{ _e( 'Skip to content') }}</a>
+    {# Screen reader text #}
+    <a href="#main">{{ _e( 'Skip to content') }}</a>
 
-<div id="webPage">
-    {% include 'partials/header.twig' %}
+    <div id="theme">
+        {% include 'partials/header.twig' %}
 
-    <main id="mainContent">
-        {% if title %}
-            <h1>{{ title }}</h1>
-        {% endif %}
+        <main id="main">
+            {% if title %}
+                <h1>{{ title }}</h1>
+            {% endif %}
 
-        {% block content %}
-            Sorry, no content
-        {% endblock %}
-    </main>
+            {% block content %}
+                <p>Sorry, no content.</p>
+            {% endblock %}
+        </main>
 
-    {% include 'partials/footer.twig' %}
-</div>
+        {% include 'partials/footer.twig' %}
+    </div>
 
-{{ function('wp_footer') }}
+    {{ function('wp_footer') }}
 </body>
 </html>
