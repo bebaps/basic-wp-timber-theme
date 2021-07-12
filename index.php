@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * The main template file
  * This is the most generic template file in a WordPress theme
@@ -16,7 +19,9 @@
 $context = Timber::context();
 $context['posts'] = new Timber\PostQuery();
 $templates = ['index.twig'];
+
 if (is_home()) {
     array_unshift($templates, 'front-page.twig', 'home.twig');
 }
+
 Timber::render($templates, $context);

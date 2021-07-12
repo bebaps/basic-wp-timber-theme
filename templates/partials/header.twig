@@ -1,6 +1,6 @@
 <header>
     {% block header %}
-        <h1 role="banner">
+        <h1>
             <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
         </h1>
 
@@ -8,5 +8,7 @@
             {# If you want to use the default WordPress markup, use wp_nav_menu instead and delete partials/menu.twig #}
             {% include 'partials/menu.twig' with {items: menu.get_items} %}
         {% endif %}
+
+        {{ function('get_search_form') }}
     {% endblock %}
 </header>

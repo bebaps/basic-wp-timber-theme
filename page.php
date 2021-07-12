@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * The template for displaying all pages.
  *
@@ -26,5 +29,4 @@ $context = Timber::context();
 $timber_post = new Timber\Post();
 $context['post'] = $timber_post;
 
-// Cache the file and data for 1 week
-Timber::render(['page-' . $timber_post->post_name . '.twig', 'page.twig'], $context, 604800);
+Timber::render(['page-' . $timber_post->post_name . '.twig', 'page.twig'], $context);

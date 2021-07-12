@@ -1,29 +1,39 @@
 <?php
 
+declare(strict_types = 1);
+
 use Timber\Site;
 use Timber\Menu;
+use Twig\Environment;
 use Twig\Extension\StringLoaderExtension;
 
+/**
+ * Class BasicWPTheme
+ */
 class BasicWPTheme extends Site
 {
+    public const BASIC_WP_THEME_VERSION = '1.0.0';
+
     public function __construct()
     {
-        add_action('after_setup_theme', [$this, 'addThemeSupport']);
         add_filter('timber/context', [$this, 'addToContext']);
         add_filter('timber/twig', [$this, 'addToTwig']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueues']);
+
+        add_action('after_setup_theme', [$this, 'themeConfig']);
+        add_action('widgets_init', [$this, 'themeWidgets']);
+        add_action('wp_enqueue_scripts', [$this, 'themeEnqueues']);
 
         parent::__construct();
     }
 
     /**
-     * This is where you add some context.
+     * Add custom data to Twig's $context.
      *
-     * @param  string  $context  context['this'] Being the Twig's {{ this }}.
+     * @param array $context context['this'] being Twig's {{ this }}.
      *
-     * @return mixed
+     * @return array
      */
-    public function addToContext($context)
+    public function addToContext(array $context): array
     {
         $context['site'] = $this;
         $context['menu'] = new Menu();
@@ -32,11 +42,23 @@ class BasicWPTheme extends Site
     }
 
     /**
-     * Theme supports.
+     * Add custom functions/functionality to Twig.
      *
-     * @return void
+     * @param \Twig\Environment $twig The Twig environment.
+     *
+     * @return \Twig\Environment
      */
-    public function addThemeSupport()
+    public function addToTwig(Environment $twig): Environment
+    {
+        $twig->addExtension(new StringLoaderExtension());
+
+        return $twig;
+    }
+
+    /**
+     * Configure the theme.
+     */
+    public function themeConfig()
     {
         // Add default posts and comments RSS feed links to head.
         add_theme_support('automatic-feed-links');
@@ -56,7 +78,12 @@ class BasicWPTheme extends Site
          */
         add_theme_support('post-thumbnails');
 
-        add_theme_support('menus');
+        // Register navigation menus.
+        register_nav_menus(
+            [
+                'primary' => esc_html__('Primary', 'basic-wp-theme'),
+            ]
+        );
 
         /**
          * Switch default core markup for search form, comment form, and comments
@@ -65,36 +92,62 @@ class BasicWPTheme extends Site
         add_theme_support(
             'html5',
             [
+                'search-form',
                 'comment-form',
                 'comment-list',
                 'gallery',
                 'caption',
+                'style',
+                'script',
+            ]
+        );
+
+        // Add theme support for selective refresh for widgets.
+        add_theme_support('customize-selective-refresh-widgets');
+
+        /**
+         * Add support for core custom logo.
+         *
+         * @link https://codex.wordpress.org/Theme_Logo
+         */
+        add_theme_support(
+            'custom-logo',
+            [
+                'height' => 250,
+                'width' => 250,
+                'flex-width' => true,
+                'flex-height' => true,
             ]
         );
     }
 
     /**
-     * This is where you can add your own functions to twig.
+     * Add custom widgets to the theme.
      *
-     * @param  string  $twig  get extension.
-     *
-     * @return mixed
+     * @see https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
      */
-    public function addToTwig($twig)
+    public function themeWidgets()
     {
-        $twig->addExtension(new StringLoaderExtension());
-
-        return $twig;
+        register_sidebar(
+            [
+                'name' => esc_html__('Sidebar', 'basic-wp-theme'),
+                'id' => 'sidebar-1',
+                'description' => esc_html__('Add widgets here.', 'basic-wp-theme'),
+                'before_widget' => '<aside class="%2$s">',
+                'after_widget' => '</aside>',
+                'before_title' => '<h2>',
+                'after_title' => '</h2>',
+            ]
+        );
     }
 
     /**
-     * Enqueue theme assets.
-     *
-     * @return void
+     * Add custom theme CSS/JS.
      */
-    public function enqueues()
+    public function themeEnqueues()
     {
-        // Make use of the default WordPress comment script.
+        wp_enqueue_style('basic-wp-theme-style', get_stylesheet_uri(), [], self::BASIC_WP_THEME_VERSION);
+
         if ((!is_admin()) && is_singular() && comments_open() && get_option('thread_comments')) {
             wp_enqueue_script('comment-reply');
         }

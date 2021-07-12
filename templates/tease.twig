@@ -1,10 +1,12 @@
 <article class="tease-{{ post.post_type }}">
     {% block content %}
         <h2><a href="{{ post.link }}">{{ post.title }}</a></h2>
+
         <p>{{ post.preview.length(25) }}</p>
+
         {% if post.get_thumbnail %}
             <figure>
-                <img src="{{ post.thumbnail.src }}" alt="">
+                <img src="{{ post.thumbnail.src }}" alt="" width="" height="">
             </figure>
         {% endif %}
     {% endblock %}

@@ -1,4 +1,11 @@
 /*!
  * Theme Name: Basic WP Timber Theme
+ * Description: A basic WordPress starter theme using Timber..
  * Author: Alexander Persky
+  * Version: 1.0.0
+ * License: MIT
+ *
+ * Although you san add CSS in this file, it is common to only use this file
+ * for theme registration, especially if you are using a tool like Gulp or
+ * Webpack to build your CSS.
  */

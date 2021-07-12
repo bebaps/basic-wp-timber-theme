@@ -1,13 +1,17 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * If you are installing Timber as a Composer dependency in your theme, you'll need this block
  * to load your dependencies and initialize Timber. If you are using Timber via the WordPress.org
  * plug-in, you can safely delete this block.
  */
-$composer_autoload = __DIR__ . '/vendor/autoload.php';
+$composer_autoload = get_theme_file_path('/vendor/autoload.php');
 
 if (file_exists($composer_autoload)) {
     require_once $composer_autoload;
+
     $timber = new Timber\Timber();
 }
 
@@ -18,17 +22,20 @@ if (file_exists($composer_autoload)) {
 if (!class_exists('Timber')) {
     add_action(
         'admin_notices',
-        function() {
-            echo '<div class="error"><p>This theme will not work until Timber is activated. <a href="' . esc_url(admin_url('plugins.php#timber')) . '">Activate the plugin</a> or install it as a dependency via Composer.</p></div>';
+        function () {
+            echo '<div class="error"><p>This theme will not work until Timber is activated. <a href="' . esc_url(
+                    admin_url('plugins.php#timber')
+                ) . '">Activate the plugin</a> or install it as a Composer dependency.</p></div>';
         }
     );
 
     add_filter(
         'template_include',
-        function($template) {
+        function ($template) {
             return get_theme_file_path('static/timber.html');
         }
     );
+
     return;
 }
 
@@ -44,17 +51,6 @@ Timber::$dirname = ['templates'];
 Timber::$autoescape = false;
 
 /**
- * Add a custom route for blog posts.
- * They can be visited via /post-name as well as /blog/post-name.
- *
- * See https://timber.github.io/docs/guides/routing
- */
-Routes::map('blog/:name', function($params) {
-    $query = 'post_type=post&name=' . $params['name'];
-    Routes::load('single.php', null, $query, 200);
-});
-
-/**
  * Cache compiled Twig files.
  * This does not cache the contents of the variables.
  * Best to set to true only when going to production.
@@ -66,4 +62,4 @@ Timber::$cache = false;
 /**
  * Instantiate the core theme class.
  */
-require_once __DIR__ . '/inc/BasicWPTheme.php';
+require_once get_theme_file_path('/inc/BasicWPTheme.php');

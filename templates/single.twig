@@ -1,9 +1,9 @@
-{% extends "base.twig" %}
+{% extends 'base.twig' %}
 
 {% block content %}
     <article class="post-type-{{ post.post_type }}">
         <figure>
-            <img src="{{ post.thumbnail.src|resize(1200, 300) }}" alt="">
+            <img src="{{ post.thumbnail.src|resize(1200, 300) }}" alt="" width="" height="">
         </figure>
 
         <h1>{{ post.title }}</h1>
@@ -15,8 +15,7 @@
 
         {{ post.content }}
 
-        {# Comments #}
-        {# For a completely custom method, see https://timber.github.io/docs/guides/comments #}
+        {# For a custom method of displaying comments, see https://timber.github.io/docs/guides/comments #}
         {{ function('comments_template') }}
     </article>
 

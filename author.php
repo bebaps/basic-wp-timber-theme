@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * The template for displaying Author Archive pages
  *
@@ -13,11 +16,11 @@ global $wp_query;
 
 $context = Timber::context();
 $context['posts'] = new Timber\PostQuery();
+
 if (isset($wp_query->query_vars['author'])) {
     $author = new Timber\User($wp_query->query_vars['author']);
     $context['author'] = $author;
     $context['title'] = 'Author Archives: ' . $author->name();
 }
 
-// Cache the file and data for 1 week
-Timber::render(['author.twig', 'archive.twig'], $context, 604800);
+Timber::render(['author.twig', 'archive.twig'], $context);

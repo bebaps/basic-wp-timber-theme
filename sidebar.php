@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * The Template for the sidebar containing the main widget area
  *
@@ -9,4 +12,7 @@
  * @subpackage  Timber
  */
 
-Timber::render(['sidebar.twig'], $data);
+$context = Timber::context();
+$context['widget'] = dynamic_sidebar('sidebar-1');
+
+Timber::render(['sidebar.twig'], $context);
